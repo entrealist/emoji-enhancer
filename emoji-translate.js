@@ -1,19 +1,19 @@
-const emojilib = require('emojilib');
-const SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~';
-const allEmoji = emojilib.lib;
+const emojilib = require('emojilib')
+const SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~'
+const allEmoji = emojilib.lib
 
 /**
  * Returns true for something that's already an emoji like 🤖.
  * @param {String} word The word to be translated
  * @returns {Bool}
  */
-function isMaybeAlreadyAnEmoji(word) {
-  let ranges = [
-      '\ud83c[\udf00-\udfff]', // U+1F300 to U+1F3FF
-      '\ud83d[\udc00-\ude4f]', // U+1F400 to U+1F64F
-      '\ud83d[\ude80-\udeff]' // U+1F680 to U+1F6FF
-  ];
-  return word.match(ranges.join('|')) !== null;
+function isMaybeAlreadyAnEmoji (word) {
+  const ranges = [
+    '\ud83c[\udf00-\udfff]', // U+1F300 to U+1F3FF
+    '\ud83d[\udc00-\ude4f]', // U+1F400 to U+1F64F
+    '\ud83d[\ude80-\udeff]' // U+1F680 to U+1F6FF
+  ]
+  return word.match(ranges.join('|')) !== null
 }
 
 /**
@@ -21,69 +21,68 @@ function isMaybeAlreadyAnEmoji(word) {
  * @param {String} word The word to be translated
  * @returns {Array} The list of emoji translations or '' if none exist.
  */
-function getAllEmojiForWord(originalWord) {
-  let word = originalWord.trim().toLowerCase();
+function getAllEmojiForWord (originalWord) {
+  const word = originalWord.trim().toLowerCase()
 
-  if (!word || word === '' || word === 'a' || word === 'it' || word === 'is')
-    return '';
+  if (!word || word === '' || word === 'a' || word === 'it' || word === 'is') { return '' }
 
   // Maybe this is a plural word but the word is the singular?
   // Don't do it for two letter words since "as" would become "a" etc.
-  let maybeSingular = '';
-  if (word.length > 2 && word[word.length - 1] == 's') {
-    maybeSingular = word.slice(0, word.length - 1);
+  let maybeSingular = ''
+  if (word.length > 2 && word[word.length - 1] === 's') {
+    maybeSingular = word.slice(0, word.length - 1)
   }
 
   // Maybe this is a singular word but the word is the plural?
   // Don't do this for single letter since that will pluralize crazy things.
-  let maybePlural = (word.length == 1) ? '' : word + 's';
+  const maybePlural = (word.length === 1) ? '' : word + 's'
 
-  let maybeVerbedSimple = '';
-  let maybeVerbedVowel = '';
-  let maybeVerbedDoubled  = '';
+  let maybeVerbedSimple = ''
+  let maybeVerbedVowel = ''
+  let maybeVerbedDoubled = ''
 
   if (word.indexOf('ing') !== -1) {
-    let verb = word.substr(0, word.length - 3);
+    const verb = word.substr(0, word.length - 3)
     // eating -> eat
-    maybeVerbedSimple = verb;
+    maybeVerbedSimple = verb
     // dancing -> dance
-    maybeVerbedVowel = verb + 'e';
+    maybeVerbedVowel = verb + 'e'
     // running -> run
-    maybeVerbedDoubled = verb.substr(0, verb.length - 1);
+    maybeVerbedDoubled = verb.substr(0, verb.length - 1)
   }
 
   // Go through all the things and find the first one that matches.
-  let useful = [];
+  const useful = []
 
   // If this is already an emoji, don't try to translate it.
   if (isMaybeAlreadyAnEmoji(word)) {
-    useful.push(word);
-    return useful;
+    useful.push(word)
+    return useful
   }
 
   // If it's "i" or "i", add some faces to it.
   if (word === 'i' || word === 'you') {
-    useful.push('😀');
-    useful.push('😊');
-  } else if (word === 'she'){
-    useful.push('💁');
-  } else if (word === 'he'){
-    useful.push('💁‍♂️');
+    useful.push('😀')
+    useful.push('😊')
+  } else if (word === 'she') {
+    useful.push('💁')
+  } else if (word === 'he') {
+    useful.push('💁‍♂️')
   } else if (word === 'we' || word === 'they') {
-    useful.push('👩‍👩‍👦‍👦');
+    useful.push('👩‍👩‍👦‍👦')
   } else if (word === 'am' || word === 'is' || word === 'are') {
-    useful.push('👉');
+    useful.push('👉')
   } else if (word === 'thanks') {
-    useful.push('🙌');
+    useful.push('🙌')
   }
 
-  for (let emoji in allEmoji) {
-    let words = allEmoji[emoji].keywords;
+  for (const emoji in allEmoji) {
+    const words = allEmoji[emoji].keywords
     // TODO: omg refactor this one day, please. Why is this even. Why.
-    if (word == allEmoji[emoji].char ||
-        emoji == word || (emoji == word + '_face') ||
-        emoji == maybeSingular || emoji == maybePlural ||
-        emoji == maybeVerbedSimple || emoji == maybeVerbedVowel || emoji == maybeVerbedDoubled ||
+    if (word === allEmoji[emoji].char ||
+        emoji === word || (emoji === word + '_face') ||
+        emoji === maybeSingular || emoji === maybePlural ||
+        emoji === maybeVerbedSimple || emoji === maybeVerbedVowel || emoji === maybeVerbedDoubled ||
         (words && words.indexOf(word) >= 0) ||
         (words && words.indexOf(maybeSingular) >= 0) ||
         (words && words.indexOf(maybePlural) >= 0) ||
@@ -92,12 +91,12 @@ function getAllEmojiForWord(originalWord) {
         (words && words.indexOf(maybeVerbedDoubled) >= 0)) {
       // If it's a two letter word that got translated to a flag, it's 99% of the
       // time incorrect, so stop doing that.
-      if (!(word.length <= 3 && allEmoji[emoji].category == 'flags')) {
-        useful.push(allEmoji[emoji].char);
+      if (!(word.length <= 3 && allEmoji[emoji].category === 'flags')) {
+        useful.push(allEmoji[emoji].char)
       }
     }
   }
-  return (useful.length === 0) ? '' : useful;
+  return (useful.length === 0) ? '' : useful
 }
 
 /**
@@ -105,9 +104,9 @@ function getAllEmojiForWord(originalWord) {
  * @param {String} word The word to be translated.
  * @returns {String} A random emoji translation or '' if none exists.
  */
-function getEmojiForWord(word) {
-  let translations = getAllEmojiForWord(word);
-  return translations[Math.floor(Math.random() * translations.length)];
+function getEmojiForWord (word) {
+  const translations = getAllEmojiForWord(word)
+  return translations[Math.floor(Math.random() * translations.length)]
 }
 
 /**
@@ -119,40 +118,38 @@ function getEmojiForWord(word) {
  * @param {String} word The word to be translated
  * @returns {HTMLElement} A <span> or <select> element as above.
  */
-function translateForDisplay(word) {
-  var node = document.createElement('span');
+function translateForDisplay (word) {
+  let node = document.createElement('span')
 
   // Punctuation blows. Get all the punctuation at the start and end of the word.
-  let firstSymbol = '';
-  let lastSymbol = '';
+  let firstSymbol = ''
+  let lastSymbol = ''
 
-  while (SYMBOLS.indexOf(word[0]) != -1) {
-    firstSymbol += word[0];
-    word = word.slice(1, word.length);
+  while (SYMBOLS.indexOf(word[0]) !== -1) {
+    firstSymbol += word[0]
+    word = word.slice(1, word.length)
   }
-  while (SYMBOLS.indexOf(word[word.length - 1]) != -1) {
-    lastSymbol += word[word.length - 1];
-    word = word.slice(0, word.length - 1);
+  while (SYMBOLS.indexOf(word[word.length - 1]) !== -1) {
+    lastSymbol += word[word.length - 1]
+    word = word.slice(0, word.length - 1)
   }
 
   // If it's already an emoji, return it.
-  var emoji = getAllEmojiForWord(word);
-  if (emoji === '')
-    emoji = [word];
+  let emoji = getAllEmojiForWord(word)
+  if (emoji === '') { emoji = [word] }
 
-  var node;
   if (emoji.length === 1) {
-    node = document.createElement('span');
-    node.innerHTML = firstSymbol + emoji + lastSymbol + ' ';
+    node = document.createElement('span')
+    node.innerHTML = firstSymbol + emoji + lastSymbol + ' '
   } else {
-    node = document.createElement('select');
-    for (var i = 0; i < emoji.length; i++) {
-      var option = document.createElement('option');
-      option.textContent = firstSymbol + emoji[i] + lastSymbol + ' ';
-      node.appendChild(option);
+    node = document.createElement('select')
+    for (let i = 0; i < emoji.length; i++) {
+      const option = document.createElement('option')
+      option.textContent = firstSymbol + emoji[i] + lastSymbol + ' '
+      node.appendChild(option)
     }
   }
-  return node;
+  return node
 }
 
 /**
@@ -162,41 +159,41 @@ function translateForDisplay(word) {
  * @param {Bool} onlyEmoji True if the translation should omit all untranslatable words
  * @returns {String} An emoji translation!
  */
-function translate(sentence, onlyEmoji) {
-  let translation = '';
-  let words = sentence.split(' ');
-  for (let i = 0; i < words.length; i++ ) {
+function translate (sentence, onlyEmoji) {
+  let translation = ''
+  const words = sentence.split(' ')
+  for (let i = 0; i < words.length; i++) {
     // Punctuation blows. Get all the punctuation at the start and end of the word.
     // TODO: stop copy pasting this.
-    let firstSymbol = '';
-    let lastSymbol = '';
-    var word = words[i];
+    let firstSymbol = ''
+    let lastSymbol = ''
+    let word = words[i]
 
-    while (SYMBOLS.indexOf(word[0]) != -1) {
-      firstSymbol += word[0];
-      word = word.slice(1, word.length);
+    while (SYMBOLS.indexOf(word[0]) !== -1) {
+      firstSymbol += word[0]
+      word = word.slice(1, word.length)
     }
-    while (SYMBOLS.indexOf(word[word.length - 1]) != -1) {
-      lastSymbol += word[word.length - 1];
-      word = word.slice(0, word.length - 1);
+    while (SYMBOLS.indexOf(word[word.length - 1]) !== -1) {
+      lastSymbol += word[word.length - 1]
+      word = word.slice(0, word.length - 1)
     }
 
     if (onlyEmoji) {
       firstSymbol = lastSymbol = ''
     }
 
-    let translated = getEmojiForWord(word);
+    const translated = getEmojiForWord(word)
     if (translated) {
-      translation += firstSymbol + translated + lastSymbol + ' ';
-    } else if (!onlyEmoji){
-      translation += firstSymbol + word + lastSymbol +  ' '
+      translation += firstSymbol + translated + lastSymbol + ' '
+    } else if (!onlyEmoji) {
+      translation += firstSymbol + word + lastSymbol + ' '
     }
   }
-  return translation;
+  return translation
 }
 
-module.exports.isMaybeAlreadyAnEmoji = isMaybeAlreadyAnEmoji;
-module.exports.getAllEmojiForWord = getAllEmojiForWord;
-module.exports.getEmojiForWord = getEmojiForWord;
-module.exports.translateForDisplay = translateForDisplay;
-module.exports.translate = translate;
+module.exports.isMaybeAlreadyAnEmoji = isMaybeAlreadyAnEmoji
+module.exports.getAllEmojiForWord = getAllEmojiForWord
+module.exports.getEmojiForWord = getEmojiForWord
+module.exports.translateForDisplay = translateForDisplay
+module.exports.translate = translate

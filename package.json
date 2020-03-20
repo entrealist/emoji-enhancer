@@ -4,6 +4,7 @@
   "description": "A library that translates english words to emoji",
   "main": "emoji-translate.js",
   "scripts": {
+    "lint": "standard --fix",
     "test": "node test.js",
     "build": "rm .gitignore && npm install && webpack",
     "clean": "rm -rf ./node_modules"
@@ -19,6 +20,7 @@
     "emojilib": "^2.0.0"
   },
   "devDependencies": {
+    "standard": "^14.3.3",
     "tape": "^4.6.3",
     "webpack": "^2.6.1"
   }

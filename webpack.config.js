@@ -1,4 +1,4 @@
-var path = require('path');
+var path = require('path')
 
 module.exports = {
   entry: './public/index.js',
@@ -6,4 +6,4 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public')
   }
-};
+}
