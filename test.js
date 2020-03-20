@@ -2,11 +2,11 @@ const test = require('tape')
 const path = require('path')
 const translate = require(path.join(__dirname, '/emoji-translate.js'))
 
-test('isMaybeAlreadyAnEmoji', function (t) {
-  t.equal(translate.isMaybeAlreadyAnEmoji('batman'), false, 'batman is not an emoji')
-  t.equal(translate.isMaybeAlreadyAnEmoji('🐳'), true, '🐳 is an emoji')
-  t.equal(translate.isMaybeAlreadyAnEmoji('🤞🏿'), true, '🤞🏿 is an emoji')
-  t.equal(translate.isMaybeAlreadyAnEmoji('👩🏽‍🏫'), true, '👩🏽‍🏫 is an emoji')
+test('isEmoji', function (t) {
+  t.equal(translate.isEmoji('batman'), false, 'batman is not an emoji')
+  t.equal(translate.isEmoji('🐳'), true, '🐳 is an emoji')
+  t.equal(translate.isEmoji('🤞🏿'), true, '🤞🏿 is an emoji')
+  t.equal(translate.isEmoji('👩🏽‍🏫'), true, '👩🏽‍🏫 is an emoji')
   t.end()
 })
 
@@ -20,30 +20,19 @@ test('getAllEmojiForWord', function (t) {
   t.end()
 })
 
-test('getEmojiForWord', function (t) {
-  t.equal(translate.getEmojiForWord('👀'), '👀', '👀 is translated to 👀')
-  const allCats = translate.getAllEmojiForWord('cat')
-  const translatedCat = translate.getEmojiForWord('cat')
-  t.equal(typeof (translatedCat) === 'string', true, 'cat is translated to a string')
-  t.equal(allCats.indexOf(translatedCat) !== -1, true, 'cat is translated to something in the list')
-  t.end()
-})
-
 test('translate', function (t) {
   const sentence = 'the house is on fire and the cat is eating the cake'
-  const translatedWithWords = translate.translate(sentence)
-  const translatedWithoutWords = translate.translate(sentence, true)
-  t.equal(translatedWithWords !== '', true, 'sentence can be translated to something with words')
-  t.equal(translatedWithoutWords !== '', true, 'sentence can be translated to something without words')
-  t.equal(translatedWithWords !== translatedWithoutWords, true, 'those two things are different')
-
+  const translated = translate.translate(sentence)
+  t.equal(
+    translated,
+    'the house 🏘 is on 🔛 fire 🔥 and the cat 😺 is eating 🍽 the cake 🍰',
+    'sentence can be translated to something with words')
   t.end()
 })
 
 test('punctuation', function (t) {
   // Exclamation marks should be preserved
   t.equal(2, translate.translate('YES! victory!').match(/!/g).length)
-  t.equal(null, translate.translate('YES! victory!', true).match(/!/g))
   t.end()
 })
 
@@ -54,14 +43,6 @@ test('flags', function (t) {
 
   // YES should not have a flag.
   t.equal(-1, translate.getAllEmojiForWord('yes').indexOf('🇾🇪'))
-  t.end()
-})
-
-test('hard coded words', function (t) {
-  t.notEqual('i am', translate.translate('i am').trim())
-  t.notEqual('she he is', translate.translate('she he is').trim())
-  t.notEqual('we they are', translate.translate('we they are').trim())
-  t.equal('🙌', translate.translate('thanks').trim())
   t.end()
 })
 
