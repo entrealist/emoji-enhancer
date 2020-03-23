@@ -20,13 +20,4 @@ It only exports few original methods:
 
 
 ## Sample demo
-
-
-## TODO
-The lib:
-- [ ] multilang support
-- [ ] return data as JSON instead of replacing words on-site
-
-Web demo:
-- [ ] if more than 1 emoji found, let users pick the one they want
-- [ ] input language picker
+https://postatum.github.io/emoji-enhancer/
