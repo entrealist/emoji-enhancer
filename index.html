@@ -144,7 +144,7 @@
 
 
   <script type="text/javascript">
-    console.log(EmojiTranslate.translate('the cat is on fire'));
+    console.log(EmojiEnhance.enhance('the cat is on fire'));
   </script>
 
   <script>
@@ -153,25 +153,13 @@
       updateOutput();
     });
     function updateOutput() {
-      // Rather than calling EmojiTranslate.translate, we want all the
+      // Rather than calling EmojiEnhance.enhance, we want all the
       // possible options.
       document.getElementById('output').innerHTML = '';
       var text = document.getElementById('input').value;
       var container = document.getElementById('output');
-      var allLines = text.split('\n');
-      for (var line = 0; line < allLines.length; line++ ){
-        if (allLines[line] == '')
-          continue
-        var words = allLines[line].split(' ');
-        // Re-add the translated words.
-        for (var i = 0; i < words.length; i++ ) {
-          var node = EmojiTranslate.translateForDisplay(words[i]);
-          if (node)
-            container.appendChild(node);
-        }
-        var newLine = document.createElement('br');
-        container.appendChild(newLine);
-      }
+      var translated = EmojiEnhance.enhance(text);
+      container.innerText = translated;
       return container;
     }
     function copy() {
