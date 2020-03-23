@@ -5,7 +5,7 @@ const SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~'
 /**
  * Returns true for something that's already an emoji like 🤖.
  *
- * @param {String} word The word to be translated
+ * @param {String} word The word to be enhanced
  * @returns {Bool}
  */
 function isEmoji (word) {
@@ -20,7 +20,7 @@ function isEmoji (word) {
 /**
  * Returns the list of all emoji translations of an english word.
  *
- * @param {String} word The word to be translated
+ * @param {String} word The word to be enhanced
  * @returns {Array} The list of emoji translations or '' if none exist.
  */
 function getAllEmojiForWord (originalWord) {
@@ -61,7 +61,7 @@ function getAllEmojiForWord (originalWord) {
   // Go through all the things and find the first one that matches.
   const matchingEmojis = []
 
-  // If this is already an emoji, don't try to translate it.
+  // If this is already an emoji, don't try to enhance it.
   if (isEmoji(word)) {
     matchingEmojis.push(word)
     return matchingEmojis
@@ -92,10 +92,10 @@ function getAllEmojiForWord (originalWord) {
  * Translates an entire sentence to emoji.
  * If multiple translations exist for a particular word, a random emoji is picked.
  *
- * @param {String} sentence The sentence to be translated
+ * @param {String} sentence The sentence to be enhanced
  * @returns {String} An emoji translation!
  */
-function translate (sentence) {
+function enhance (sentence) {
   return sentence.split(' ')
     .map(word => {
       // Punctuation blows. Get all the punctuation at the start and end of the word.
@@ -122,4 +122,4 @@ function translate (sentence) {
 
 module.exports.isEmoji = isEmoji
 module.exports.getAllEmojiForWord = getAllEmojiForWord
-module.exports.translate = translate
+module.exports.enhance = enhance

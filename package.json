@@ -1,8 +1,8 @@
 {
-  "name": "moji-translate",
-  "version": "1.0.8",
+  "name": "emoji-enhancer",
+  "version": "1.0.0",
   "description": "A library that translates english words to emoji",
-  "main": "emoji-translate.js",
+  "main": "emoji-enhancer.js",
   "scripts": {
     "lint": "standard --fix",
     "test": "node test.js",
@@ -11,11 +11,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/notwaldorf/emoji-translate.git"
+    "url": "git+https://github.com/postatum/emoji-enhancer.git"
   },
-  "author": "Monica Dinculescu <noms@google.com>",
+  "author": "Artem Kostiuk <postatum@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/notwaldorf/emoji-translate#readme",
+  "homepage": "https://github.com/postatum/emoji-enhancer#readme",
   "dependencies": {
     "emojilib": "^2.0.0"
   },

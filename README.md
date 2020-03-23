@@ -1,5 +1,5 @@
-# emoji-translate
-You know how sometimes you type English and it has all these letters and words and no emoji? Yeah, emoji-translate fixes that.
+# emoji-enhancer
+Inject emojis after each word in a text.
 
 ## About this fork
 It's a refactored and simplified version of [notwaldorf/emoji-translate](https://github.com/notwaldorf/emoji-translate).

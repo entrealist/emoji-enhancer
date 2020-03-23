@@ -1,2 +1,2 @@
-import EmojiTranslate from '../emoji-translate.js'
-window.EmojiTranslate = EmojiTranslate
+import EmojiEnhance from '../emoji-enhancer.js'
+window.EmojiEnhance = EmojiEnhance
