@@ -1,6 +1,9 @@
-const allEmoji = require('emojilib').lib
-
 const SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~'
+
+const emojiLibs = {
+  en: require('./emojilib/en'),
+  ru: require('./emojilib/ru')
+}
 
 /**
  * Returns true for something that's already an emoji like 🤖.
@@ -21,9 +24,10 @@ function isEmoji (word) {
  * Returns the list of all emoji translations of an english word.
  *
  * @param {String} word The word to be enhanced
+ * @param {String} langCode Language code (en, ru, ua)
  * @returns {Array} The list of emoji translations or '' if none exist.
  */
-function getAllEmojiForWord (originalWord) {
+function getAllEmojiForWord (originalWord, langCode='en') {
   const word = originalWord.trim().toLowerCase()
   const ignoredWords = [
     '', 'a', 'it', 'is'
@@ -66,22 +70,21 @@ function getAllEmojiForWord (originalWord) {
     matchingEmojis.push(word)
     return matchingEmojis
   }
-
-  for (const emoji in allEmoji) {
-    const keywords = allEmoji[emoji].keywords || []
+  const emojiLib = emojiLibs[langCode]
+  for (const emojiName in emojiLib) {
+    const keywords = emojiLib[emojiName].keywords || []
     const variations = [
       word, word + '_face', maybeSingular, maybePlural, maybeVerbedSimple,
       maybeVerbedVowel, maybeVerbedDoubled
     ]
 
-    if (word === allEmoji[emoji].char ||
-        variations.includes(emoji) ||
+    if (variations.includes(emojiName) ||
         variations.filter(v => keywords.includes(v)).length > 0) {
       // If it's a two letter word that got translated to a flag, it's 99% of the
       // time incorrect, so stop doing that.
-      const isFlag = word.length <= 3 && allEmoji[emoji].category === 'flags'
+      const isFlag = word.length <= 3 && emojiLib[emojiName].category === 'flags'
       if (!isFlag) {
-        matchingEmojis.push(allEmoji[emoji].char)
+        matchingEmojis.push(emojiLib[emojiName].char)
       }
     }
   }
@@ -93,9 +96,10 @@ function getAllEmojiForWord (originalWord) {
  * If multiple translations exist for a particular word, a random emoji is picked.
  *
  * @param {String} sentence The sentence to be enhanced
+ * @param {String} langCode Language code (en, ru, ua)
  * @returns {String} An emoji translation!
  */
-function enhance (sentence) {
+function enhance (sentence, langCode='en') {
   return sentence.split(' ')
     .map(word => {
       // Punctuation blows. Get all the punctuation at the start and end of the word.
@@ -110,7 +114,7 @@ function enhance (sentence) {
         suffix += word[word.length - 1]
         word = word.slice(0, word.length - 1)
       }
-      const emoji = getAllEmojiForWord(word)[0]
+      const emoji = getAllEmojiForWord(word, langCode)[0]
       if (emoji) {
         return `${prefix}${word} ${emoji}${suffix}`
       } else {
