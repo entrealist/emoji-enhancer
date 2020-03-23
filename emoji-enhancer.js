@@ -2,6 +2,7 @@ const SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~'
 
 const emojiLibs = {
   en: require('./emojilib/en'),
+  ua: require('./emojilib/ua'),
   ru: require('./emojilib/ru')
 }
 
