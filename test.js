@@ -20,7 +20,7 @@ test('getAllEmojiForWord', function (t) {
   t.end()
 })
 
-test('translate', function (t) {
+test('translate en', function (t) {
   const sentence = 'the house is on fire and the cat is eating the cake'
   const translated = lib.enhance(sentence)
   t.equal(

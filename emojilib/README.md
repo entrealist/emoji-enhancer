@@ -1,1 +1,0 @@
-Copied and reworked version of [muan/emojilib](https://github.com/muan/emojilib).

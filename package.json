@@ -16,7 +16,9 @@
   "author": "Artem Kostiuk <postatum@gmail.com>",
   "license": "MIT",
   "homepage": "https://github.com/postatum/emoji-enhancer#readme",
-  "dependencies": {},
+  "dependencies": {
+    "emojilib": "^2.4.0"
+  },
   "devDependencies": {
     "standard": "^14.3.3",
     "tape": "^4.6.3",

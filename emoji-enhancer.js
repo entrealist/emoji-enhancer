@@ -1,10 +1,6 @@
 const SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~'
+const emojiLib = require('emojilib').lib
 
-const emojiLibs = {
-  en: require('./emojilib/en'),
-  ua: require('./emojilib/ua'),
-  ru: require('./emojilib/ru')
-}
 
 /**
  * Returns true for something that's already an emoji like 🤖.
@@ -25,10 +21,9 @@ function isEmoji (word) {
  * Returns the list of all emoji translations of an english word.
  *
  * @param {String} word The word to be enhanced
- * @param {String} langCode Language code (en, ru, ua)
  * @returns {Array} The list of emoji translations or '' if none exist.
  */
-function getAllEmojiForWord (originalWord, langCode='en') {
+function getAllEmojiForWord (originalWord) {
   const word = originalWord.trim().toLowerCase()
   const ignoredWords = [
     '', 'a', 'it', 'is'
@@ -71,7 +66,7 @@ function getAllEmojiForWord (originalWord, langCode='en') {
     matchingEmojis.push(word)
     return matchingEmojis
   }
-  const emojiLib = emojiLibs[langCode]
+
   for (const emojiName in emojiLib) {
     const keywords = emojiLib[emojiName].keywords || []
     const variations = [
@@ -97,10 +92,9 @@ function getAllEmojiForWord (originalWord, langCode='en') {
  * If multiple translations exist for a particular word, a random emoji is picked.
  *
  * @param {String} sentence The sentence to be enhanced
- * @param {String} langCode Language code (en, ru, ua)
  * @returns {String} An emoji translation!
  */
-function enhance (sentence, langCode='en') {
+function enhance (sentence) {
   return sentence.split(' ')
     .map(word => {
       // Punctuation blows. Get all the punctuation at the start and end of the word.
@@ -115,7 +109,7 @@ function enhance (sentence, langCode='en') {
         suffix += word[word.length - 1]
         word = word.slice(0, word.length - 1)
       }
-      const emoji = getAllEmojiForWord(word, langCode)[0]
+      const emoji = getAllEmojiForWord(word)[0]
       if (emoji) {
         return `${prefix}${word} ${emoji}${suffix}`
       } else {
